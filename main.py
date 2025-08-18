@@ -2,6 +2,7 @@ import pygame
 import urllib.request
 from classes.letter import Letter
 from classes.slot import Slot
+from classes.words import Words
 
 # Initialize Pygame
 pygame.init()
@@ -35,6 +36,8 @@ possible_words = all_words
 all_letters = list(QWERTY_ALPHABET)
 possible_letters = [all_letters]*5
 gray_letters = []
+
+word_list = Words(word_list=all_words, x=0, y=470)
 
 
 def set_slot_letter_color(letter, color):
@@ -97,7 +100,8 @@ def update_possible_words():
         and all(y in word.upper() for y in yellow_letters)
     ]
 
-    print(f"Number of possible words: {len(possible_words)}. First 5: {possible_words[:5]}")
+    word_list.update_word_list(possible_words)
+    #print(f"Number of possible words: {len(possible_words)}. First 5: {possible_words[:5]}")
 
 
 def add_letter_to_slot(letter):
@@ -152,6 +156,8 @@ def main():
 
         for slot in slots:
             slot.draw(screen)
+
+        word_list.draw(screen)
 
         pygame.display.flip()
 
