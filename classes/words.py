@@ -43,14 +43,15 @@ class Words:
         heading_text_y = -80 + self.y + (self.height - heading_text_surface.get_height()) // 2
         screen.blit(heading_text_surface, (heading_text_x, heading_text_y))
 
-        # + X more text
-        more_text_surface = self.reg_font.render(f"+ {self.list_len-8} more", True, TEXT_WHITE)
-        more_text_x = self.x + (self.width - more_text_surface.get_width()) // 2
-        more_text_y = 30 + self.y + (self.height - more_text_surface.get_height()) // 2
-        screen.blit(more_text_surface, (more_text_x, more_text_y))
-
         # List of possible words
         list_text_surface = self.reg_font.render(self.list_text[:54], True, TEXT_WHITE)
         list_text_x = self.x + (self.width - list_text_surface.get_width()) // 2
         list_text_y = -10 + self.y + (self.height - list_text_surface.get_height()) // 2
         screen.blit(list_text_surface, (list_text_x, list_text_y))
+
+        # + X more text
+        if self.list_len > 8:
+            more_text_surface = self.reg_font.render(f"+ {self.list_len-8} more", True, TEXT_WHITE)
+            more_text_x = self.x + (self.width - more_text_surface.get_width()) // 2
+            more_text_y = 30 + self.y + (self.height - more_text_surface.get_height()) // 2
+            screen.blit(more_text_surface, (more_text_x, more_text_y))

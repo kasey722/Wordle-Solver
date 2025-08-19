@@ -105,12 +105,15 @@ def update_possible_words():
 
 
 def add_letter_to_slot(letter):
-    for i in range(5):
-        if slots[i].get_letter() == "":
-            slots[i].set_letter(letter)
-            # When a letter is added to a slot, it becomes a gray letter
-            update_gray_letters(letter, GRAY)
-            break
+    if letter in QWERTY_ALPHABET:
+        # Turn the letter gray
+        update_gray_letters(letter, GRAY)
+
+        # Add the letter to the first available slot
+        for i in range(5):
+            if slots[i].get_letter() == "":
+                slots[i].set_letter(letter)
+                break
 
 
 slots = [Slot(1, x=160, y=25, callback=set_slot_letter_color),
@@ -145,6 +148,22 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            elif event.type == pygame.KEYDOWN:
+                key_name = pygame.key.name(event.key).upper()
+
+                # Remove letter from slot in last position
+                if key_name == "BACKSPACE":
+                    for i in range(4, -1, -1):
+                        if slots[i].get_letter() != "":
+                            slots[i].set_letter("")
+                            slots[i].set_color(BLACK)
+                            break
+
+                # Add typed key to first available slot (invalid keys are ignored by the function)
+                add_letter_to_slot(key_name)
+                for letter in letters:
+                    if letter.get_letter() == key_name:
+                        letter.set_color(GRAY)
 
             for letter in letters:
                 letter.handle_event(event)

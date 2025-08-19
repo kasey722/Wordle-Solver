@@ -34,6 +34,9 @@ class Slot:
         else:
             self.color = GRAY
 
+    def set_color(self, color):
+        self.color = color
+
     def get_slot_number(self):
         return self.slot_number
 
