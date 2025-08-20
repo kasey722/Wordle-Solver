@@ -3,6 +3,7 @@ import urllib.request
 from classes.letter import Letter
 from classes.slot import Slot
 from classes.words import Words
+from classes.reset import Reset
 
 # Initialize Pygame
 pygame.init()
@@ -101,7 +102,6 @@ def update_possible_words():
     ]
 
     word_list.update_word_list(possible_words)
-    #print(f"Number of possible words: {len(possible_words)}. First 5: {possible_words[:5]}")
 
 
 def add_letter_to_slot(letter):
@@ -114,6 +114,24 @@ def add_letter_to_slot(letter):
             if slots[i].get_letter() == "":
                 slots[i].set_letter(letter)
                 break
+
+
+def reset():
+    global possible_letters
+    possible_letters = [all_letters]*5
+
+    global possible_words
+    possible_words = all_words
+
+    for letter in letters:
+        letter.set_color(WHITE)
+
+    for slot in slots:
+        slot.set_letter("")
+        slot.set_color(BLACK)
+
+    gray_letters.clear()
+    word_list.update_word_list(possible_words)
 
 
 slots = [Slot(1, x=160, y=25, callback=set_slot_letter_color),
@@ -140,6 +158,8 @@ def main():
             x = 115 + x_offset
             y = 200 + y_offset
 
+    reset_button = Reset(x=685, y=350, callback=reset)
+
     screen.fill(BLACK)
 
     # Game loop
@@ -158,6 +178,8 @@ def main():
                             slots[i].set_letter("")
                             slots[i].set_color(BLACK)
                             break
+                elif key_name == "LEFT SHIFT":
+                    word_list.cycle_display_unique()
 
                 # Add typed key to first available slot (invalid keys are ignored by the function)
                 add_letter_to_slot(key_name)
@@ -169,13 +191,13 @@ def main():
                 letter.handle_event(event)
             for slot in slots:
                 slot.handle_event(event)
+            reset_button.handle_event(event)
 
         for letter in letters:
             letter.draw(screen)
-
         for slot in slots:
             slot.draw(screen)
-
+        reset_button.draw(screen)
         word_list.draw(screen)
 
         pygame.display.flip()
