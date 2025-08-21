@@ -24,13 +24,16 @@ GREEN = (83, 141, 78)
 
 answers_url = "https://gist.githubusercontent.com/cfreshman/a03ef2cba789d8cf00c08f767e0fad7b/raw/c46f451920d5cf6326d550fb2d6abb1642717852/wordle-answers-alphabetical.txt"
 guesses_url = "https://gist.githubusercontent.com/cfreshman/cdcdf777450c5b5301e439061d29694c/raw/d7c9e02d45afd26e12a71b4564189a949c29e8a9/wordle-allowed-guesses.txt"
+more_words_url = "https://raw.githubusercontent.com/darkermango/5-Letter-words/refs/heads/main/words.txt"
 
 with urllib.request.urlopen(answers_url) as response:
     words1 = response.read().decode('utf-8').splitlines()
 with urllib.request.urlopen(guesses_url) as response:
     words2 = response.read().decode('utf-8').splitlines()
+with urllib.request.urlopen(more_words_url) as response:
+    words3 = response.read().decode('utf-8').splitlines()
 
-all_words = sorted(set(words1 + words2))
+all_words = sorted(set(words1 + words2 + words3))
 
 possible_words = all_words
 
@@ -192,6 +195,7 @@ def main():
             for slot in slots:
                 slot.handle_event(event)
             reset_button.handle_event(event)
+            word_list.handle_event(event)
 
         for letter in letters:
             letter.draw(screen)
