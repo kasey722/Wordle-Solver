@@ -13,7 +13,11 @@ GREEN = (83, 141, 78)
 
 class Words:
     def __init__(self, word_list, x, y):
-        self.word_list = self.word_list_unique = word_list
+        self.word_list = word_list
+        self.word_list_unique = [
+            word for word in word_list
+            if len(set(word)) == len(word)
+        ]
         self.x = x
         self.y = y
 
@@ -22,8 +26,10 @@ class Words:
         self.arrow_width = 40
         self.arrow_height = 40
 
-        self.list_text = self.list_text_unique = ", ".join(word_list).upper()
-        self.list_len = self.list_len_unique = len(word_list)
+        self.list_text = ", ".join(word_list).upper()
+        self.list_len = len(word_list)
+        self.list_text_unique = ", ".join(self.word_list_unique).upper()
+        self.list_len_unique = len(self.word_list_unique)
 
         self.list_concat_start = 0
         self.list_concat_end = 56
@@ -54,6 +60,14 @@ class Words:
         self.list_len = len(word_list)
         self.list_text_unique = ", ".join(self.word_list_unique).upper()
         self.list_len_unique = len(self.word_list_unique)
+
+        # When the list of possible words shrinks to be smaller than where the user is scrolled to, go back to the
+        # start of the list
+        # TODO: Improve this by going to the end of the list (harder)
+        if (self.display_unique and self.list_concat_end > len(self.list_text_unique)) \
+                or (not self.display_unique and self.list_concat_end > len(self.list_text)):
+            self.list_concat_end = 56
+            self.list_concat_start = 0
 
         self.update = True
 
